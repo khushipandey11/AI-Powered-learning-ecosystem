@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ask Doubt - ExamAid</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .container {
+        background: rgba(255, 255, 255, 0.95);
+        padding: 40px;
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        max-width: 600px;
+        width: 90%;
+        backdrop-filter: blur(10px);
+      }
+
+      .app-name {
+        text-align: center;
+        color: #667eea;
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin-bottom: 10px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .subtitle {
+        text-align: center;
+        color: #666;
+        margin-bottom: 30px;
+        font-size: 1.1rem;
+      }
+
+      .form-group {
+        margin-bottom: 25px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 8px;
+        color: #333;
+        font-weight: 600;
+        font-size: 1.1rem;
+      }
+
+      textarea {
+        width: 100%;
+        padding: 15px;
+        border: 2px solid #e1e5e9;
+        border-radius: 10px;
+        font-size: 16px;
+        font-family: inherit;
+        resize: vertical;
+        min-height: 120px;
+        transition: border-color 0.3s ease;
+      }
+
+      textarea:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      }
+
+      .button-group {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .btn {
+        padding: 12px 30px;
+        border: none;
+        border-radius: 25px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+        text-align: center;
+        transition: all 0.3s ease;
+        min-width: 140px;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+      }
+
+      .btn-secondary {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        color: white;
+      }
+
+      .btn-secondary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(245, 87, 108, 0.3);
+      }
+
+      .error {
+        background: #fee;
+        color: #c33;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        border-left: 4px solid #c33;
+      }
+
+      .icon {
+        font-size: 1.2em;
+        margin-right: 8px;
+      }
+
+      @media (max-width: 480px) {
+        .container {
+          padding: 25px;
+          margin: 20px;
+        }
+
+        .app-name {
+          font-size: 2rem;
+        }
+
+        .btn {
+          min-width: 120px;
+          padding: 10px 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="app-name">ExamAid</h1>
+      <p class="subtitle">Ask Your Doubt - Get Instant AI-Powered Solutions</p>
+
+      {% if error %}
+      <div class="error"><span class="icon">⚠️</span>{{ error }}</div>
+      {% endif %}
+
+      <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="question">
+            <span class="icon">❓</span>What's your doubt?
+          </label>
+          <textarea
+            name="question"
+            id="question"
+            placeholder="Type your question or doubt here... For example: 'Explain photosynthesis' or 'How do I solve quadratic equations?'"
+            required
+          ></textarea>
+        </div>
+
+        <div class="button-group">
+          <button type="submit" class="btn btn-primary">
+            <span class="icon">🤖</span>Get AI Solution
+          </button>
+          <a
+            href="{% url 'file_upload:upload_page' %}"
+            class="btn btn-secondary"
+          >
+            <span class="icon">📁</span>Back to Upload
+          </a>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>

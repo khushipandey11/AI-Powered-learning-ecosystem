@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Generated Quiz - SmartBook</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f5f5f5;
+      }
+      .container {
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+      .header {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+      .question {
+        background: #f8f9fa;
+        padding: 20px;
+        margin: 20px 0;
+        border-radius: 8px;
+        border-left: 4px solid #007bff;
+      }
+      .question-number {
+        font-weight: bold;
+        color: #007bff;
+        margin-bottom: 10px;
+      }
+      .question-text {
+        font-size: 18px;
+        margin-bottom: 15px;
+        font-weight: 500;
+      }
+      .options {
+        margin-left: 20px;
+      }
+      .option {
+        margin: 8px 0;
+        padding: 8px;
+        background: white;
+        border-radius: 4px;
+        border: 1px solid #ddd;
+      }
+      .correct-answer {
+        background-color: #d4edda !important;
+        border-color: #c3e6cb !important;
+        font-weight: bold;
+      }
+      .export-btn {
+        background: #28a745;
+        color: white;
+        padding: 12px 24px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        margin: 20px 10px;
+        text-decoration: none;
+        display: inline-block;
+      }
+      .export-btn:hover {
+        background: #218838;
+      }
+      .back-btn {
+        background: #6c757d;
+        color: white;
+        padding: 12px 24px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        margin: 20px 10px;
+        text-decoration: none;
+        display: inline-block;
+      }
+      .back-btn:hover {
+        background: #545b62;
+      }
+      .error {
+        background: #f8d7da;
+        color: #721c24;
+        padding: 15px;
+        border-radius: 5px;
+        margin: 20px 0;
+        border: 1px solid #f5c6cb;
+      }
+      .file-info {
+        background: #e9ecef;
+        padding: 15px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>📝 Generated Quiz</h1>
+        {% if uploaded_file %}
+        <div class="file-info">
+          <strong>File:</strong> {{ uploaded_file.original_name }}
+        </div>
+        {% endif %}
+      </div>
+
+      {% if error %}
+      <div class="error"><strong>Error:</strong> {{ error }}</div>
+      <a href="/" class="back-btn">← Back to Upload</a>
+      {% elif quiz_data %}
+      <div style="text-align: center; margin-bottom: 30px">
+        <p>
+          <strong>Quiz Generated Successfully!</strong> Here are 10 questions
+          based on your uploaded content:
+        </p>
+        {% if quiz_id %}
+        <a
+          href="{% url 'generate_quiz:export_quiz' quiz_id %}?format=json"
+          class="export-btn"
+          >📥 Export as JSON</a
+        >
+        <a
+          href="{% url 'generate_quiz:export_quiz' quiz_id %}?format=txt"
+          class="export-btn"
+          >📄 Export as Text</a
+        >
+        {% endif %}
+        <a href="/" class="back-btn">← Back to Upload</a>
+      </div>
+
+      {% for question in quiz_data %}
+      <div class="question">
+        <div class="question-number">Question {{ forloop.counter }}</div>
+        <div class="question-text">{{ question.question }}</div>
+        <div class="options">
+          <div
+            class="option {% if question.correct_answer == 'A' %}correct-answer{% endif %}"
+          >
+            <strong>A)</strong> {{ question.options.A }}
+          </div>
+          <div
+            class="option {% if question.correct_answer == 'B' %}correct-answer{% endif %}"
+          >
+            <strong>B)</strong> {{ question.options.B }}
+          </div>
+          <div
+            class="option {% if question.correct_answer == 'C' %}correct-answer{% endif %}"
+          >
+            <strong>C)</strong> {{ question.options.C }}
+          </div>
+          <div
+            class="option {% if question.correct_answer == 'D' %}correct-answer{% endif %}"
+          >
+            <strong>D)</strong> {{ question.options.D }}
+          </div>
+        </div>
+        <div style="margin-top: 10px; font-size: 14px; color: #28a745">
+          <strong>Correct Answer: {{ question.correct_answer }}</strong>
+        </div>
+      </div>
+      {% endfor %}
+
+      <div style="text-align: center; margin-top: 30px">
+        {% if quiz_id %}
+        <a
+          href="{% url 'generate_quiz:export_quiz' quiz_id %}?format=json"
+          class="export-btn"
+          >📥 Export as JSON</a
+        >
+        <a
+          href="{% url 'generate_quiz:export_quiz' quiz_id %}?format=txt"
+          class="export-btn"
+          >📄 Export as Text</a
+        >
+        {% endif %}
+        <a href="/" class="back-btn">← Back to Upload</a>
+      </div>
+      {% else %}
+      <div class="error">
+        <strong>No quiz data available.</strong>
+      </div>
+      <a href="/" class="back-btn">← Back to Upload</a>
+      {% endif %}
+    </div>
+  </body>
+</html>

@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Upload PDF - ExamAid</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      .upload-container {
+        background: rgba(255, 255, 255, 0.95);
+        padding: 40px;
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        max-width: 900px;
+        margin: 0 auto;
+        backdrop-filter: blur(10px);
+      }
+
+      .app-name {
+        text-align: center;
+        color: #667eea;
+        font-size: 3rem;
+        font-weight: bold;
+        margin-bottom: 10px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .subtitle {
+        text-align: center;
+        color: #666;
+        margin-bottom: 30px;
+        font-size: 1.2rem;
+      }
+
+      .main-actions {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+        margin-bottom: 40px;
+        flex-wrap: wrap;
+      }
+
+      .upload-section {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        padding: 30px;
+        border-radius: 15px;
+        margin-bottom: 30px;
+        color: white;
+      }
+
+      .upload-section h2 {
+        margin-bottom: 20px;
+        text-align: center;
+        font-size: 1.5rem;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        font-size: 1.1rem;
+      }
+
+      input[type="file"] {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        font-size: 16px;
+      }
+
+      input[type="file"]::file-selector-button {
+        background: rgba(255, 255, 255, 0.2);
+        border: none;
+        padding: 8px 16px;
+        border-radius: 5px;
+        color: white;
+        cursor: pointer;
+        margin-right: 10px;
+      }
+
+      .button-group {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .btn {
+        padding: 12px 30px;
+        border: none;
+        border-radius: 25px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+        text-align: center;
+        transition: all 0.3s ease;
+        min-width: 140px;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+      }
+
+      .btn-secondary {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        color: white;
+      }
+
+      .btn-secondary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(79, 172, 254, 0.3);
+      }
+
+      .btn-doubt {
+        background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        color: white;
+        font-size: 18px;
+        padding: 15px 40px;
+      }
+
+      .btn-doubt:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(250, 112, 154, 0.3);
+      }
+
+      .error {
+        background: #fee;
+        color: #c33;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        border-left: 4px solid #c33;
+      }
+
+      .text-output {
+        white-space: pre-wrap;
+        background: rgba(102, 126, 234, 0.1);
+        padding: 20px;
+        border-radius: 15px;
+        margin-top: 20px;
+        border-left: 4px solid #667eea;
+      }
+
+      .uploaded-files-list {
+        margin-top: 40px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 30px;
+        border-radius: 15px;
+        color: white;
+      }
+
+      .uploaded-files-list h2 {
+        margin-bottom: 20px;
+        text-align: center;
+        font-size: 1.5rem;
+      }
+
+      .uploaded-files-list ul {
+        list-style: none;
+        padding: 0;
+      }
+
+      .uploaded-files-list li {
+        margin-bottom: 15px;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .file-name {
+        font-weight: 600;
+        font-size: 1.1rem;
+        flex: 1;
+        min-width: 200px;
+      }
+
+      .action-buttons {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .action-button {
+        padding: 8px 16px;
+        border-radius: 20px;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        min-width: 100px;
+        text-align: center;
+      }
+
+      .action-notes {
+        background: rgba(0, 123, 255, 0.8);
+        color: white;
+      }
+
+      .action-notes:hover {
+        background: rgba(0, 123, 255, 1);
+        transform: translateY(-1px);
+      }
+
+      .action-quiz {
+        background: rgba(40, 167, 69, 0.8);
+        color: white;
+      }
+
+      .action-quiz:hover {
+        background: rgba(40, 167, 69, 1);
+        transform: translateY(-1px);
+      }
+
+      .icon {
+        font-size: 1.2em;
+        margin-right: 8px;
+      }
+
+      @media (max-width: 768px) {
+        .upload-container {
+          padding: 25px;
+          margin: 10px;
+        }
+
+        .app-name {
+          font-size: 2.5rem;
+        }
+
+        .uploaded-files-list li {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .file-name {
+          text-align: center;
+          margin-bottom: 10px;
+        }
+
+        .action-buttons {
+          justify-content: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="upload-container">
+      <h1 class="app-name">ExamAid</h1>
+      <p class="subtitle">Your AI-Powered Study Companion</p>
+
+      <!-- Main Action Buttons -->
+      <div class="main-actions">
+        <a href="{% url 'doubt_solver:doubt_solver' %}" class="btn btn-doubt">
+          <span class="icon">❓</span>Ask Doubt
+        </a>
+      </div>
+
+      {% if error %}
+      <div class="error"><span class="icon">⚠️</span>{{ error }}</div>
+      {% endif %}
+
+      <!-- Upload Section -->
+      <div class="upload-section">
+        <h2><span class="icon">📁</span>Upload Your PDF Document</h2>
+
+        <form method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+
+          <div class="form-group">
+            <label for="{{ form.file.id_for_label }}">
+              <span class="icon">📄</span>Choose PDF File:
+            </label>
+            {{ form.file }}
+          </div>
+
+          <div class="button-group">
+            <button
+              type="submit"
+              name="action"
+              value="notes"
+              class="btn btn-primary"
+            >
+              <span class="icon">📝</span>Generate Notes
+            </button>
+            <button
+              type="submit"
+              name="action"
+              value="quiz"
+              class="btn btn-secondary"
+            >
+              <span class="icon">🧠</span>Generate Quiz
+            </button>
+          </div>
+        </form>
+      </div>
+      {% if text %}
+      <div class="text-output">
+        <h3><span class="icon">📄</span>Text Extracted from Latest Upload:</h3>
+        <div>{{ text }}</div>
+      </div>
+      {% endif %}
+
+      <!-- Previously Uploaded Files -->
+      {% if uploaded_files %}
+      <div class="uploaded-files-list">
+        <h2><span class="icon">📚</span>Previously Uploaded Documents</h2>
+
+        <ul>
+          {% for file in uploaded_files %}
+          <li>
+            <div class="file-name">
+              <span class="icon">📄</span>{{ file.original_name }}
+            </div>
+            4qaD
+            <div class="action-buttons">
+              <a
+                href="{% url 'generate_notes:generate_notes' file.id %}"
+                class="action-button action-notes"
+              >
+                <span class="icon">📝</span>Notes
+              </a>
+              <a
+                href="{% url 'generate_quiz:generate_quiz' file.id %}"
+                class="action-button action-quiz"
+              >
+                <span class="icon">🧠</span>Quiz
+              </a>
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+    </div>
+  </body>
+</html>
